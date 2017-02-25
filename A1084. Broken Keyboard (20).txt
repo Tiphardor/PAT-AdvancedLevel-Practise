@@ -1,0 +1,50 @@
+#include <cstdio>
+#include <cstring>
+#include <vector>
+
+using namespace std;
+
+const int maxn = 100010;
+
+char origin_str[maxn];
+char broken_str[maxn];
+
+vector<char> v;
+
+bool temp[maxn] = {false};
+
+void changeToCaptical(char str[])
+{
+	for(int i=0;i<strlen(str);i++)
+	{
+		if(str[i] >= 'a' && str[i] <= 'z')
+			str[i] = str[i] - 32;
+	}
+}
+
+int main()
+{
+	gets(origin_str);
+	gets(broken_str);
+	int origin_l = strlen(origin_str);
+	int broken_l = strlen(broken_str);
+	changeToCaptical(origin_str);
+	changeToCaptical(broken_str);
+	for(int i=0;i<broken_l;i++)
+	{
+		temp[broken_str[i]] = true;
+	}
+	for(int i=0;i<origin_l;i++)
+	{
+		if(temp[origin_str[i]] == false)
+		{
+			v.push_back(origin_str[i]);
+			temp[origin_str[i]] = true;
+		}
+	}
+	for(int i=0;i<v.size();i++)
+	{
+		printf("%c",v[i]);
+	}
+	return 0;
+}

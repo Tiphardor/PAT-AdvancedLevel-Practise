@@ -1,0 +1,75 @@
+#include<stdio.h>
+#include<math.h>
+#define Max -1000000
+struct Node
+{
+	int ni;
+	double ani;
+};
+int main()
+{
+	int n1,n2,i,j,m=0,ni,max=Max,found,x;
+	double ani;
+	Node node1[10100],node2[10100],node3[10100];
+	scanf("%d",&n1);
+	for(i=0;i<n1;i++)
+	{
+		scanf("%d %lf",&node1[i].ni,&node1[i].ani);
+	}
+	scanf("%d",&n2);
+	for(i=0;i<n2;i++)
+	{
+		scanf("%d %lf",&node2[i].ni,&node2[i].ani);
+	}
+	for(i=0;i<n1;i++)
+	{
+		for(j=0;j<n2;j++)
+		{
+			ani = node1[i].ani*node2[j].ani;
+			ni = node1[i].ni+node2[j].ni;
+			node3[m].ani = ani;
+			node3[m].ni = ni;
+			m++;
+		}
+	}
+	for(i=0;i<m;i++)
+	{
+		for(j=i+1;j<m;j++)
+		{
+			if(node3[i].ni == node3[j].ni)
+			{
+				node3[i].ani = node3[i].ani + node3[j].ani;
+				node3[j].ni = -1;
+			}
+		}
+	}
+	x=m;
+	for(i=0;i<m;i++)
+	{
+		if(node3[i].ni == -1)
+			m--;
+		if(fabs(node3[i].ani)<=1e-10)
+		{
+			m--;
+		}
+	}
+	printf("%d",m);
+	for(i=0;i<x;i++)
+	{
+		max = Max;
+		for(j=0;j<x;j++)
+		{
+			if(node3[j].ni>max)
+			{
+				max = node3[j].ni;
+				found = j;
+			}
+		}
+		if(node3[found].ni != -1&&!(fabs(node3[i].ani)<=1e-10))
+		{
+			printf(" %d %.1lf",node3[found].ni,node3[found].ani);
+		}
+		node3[found].ni = -1;
+	}
+	return 0;
+}

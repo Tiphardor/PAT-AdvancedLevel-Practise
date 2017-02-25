@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <algorithm>
+using namespace std;
+
+int n,a[1010],c[1010],index = 0;
+void inOrder(int root)
+{
+	if(root > n)
+		return ;
+	inOrder(2*root);
+	c[root] = a[index++];
+	inOrder(2*root+1);
+}
+int main()
+{
+	scanf("%d",&n);
+	for(int i = 0;i<n;i++)
+		scanf("%d",&a[i]);
+	sort(a,a+n);
+	inOrder(1);
+	for(int i = 1;i<=n;i++)
+		if(i != n)
+			printf("%d ",c[i]);
+		else
+			printf("%d",c[i]);
+	return 0;
+}

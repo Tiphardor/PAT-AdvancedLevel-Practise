@@ -1,0 +1,60 @@
+#include <cstdio>
+#include <vector>
+#include <math.h>
+
+using namespace std;
+
+const int maxn = 100010;
+
+int N,num=0,minStep = 1000000000;
+double P,r;
+
+struct Node
+{
+	int step;
+	vector<int> child;
+}tree[maxn];
+
+void DFS(int index)
+{
+	if(tree[index].child.size() == 0)
+	{
+		if(tree[index].step < minStep)
+		{
+			num = 1;
+			minStep = tree[index].step;
+		}
+		else if(tree[index].step == minStep)
+		{
+			num++;
+		}
+		return;
+	}
+	for(int i=0;i<tree[index].child.size();i++)
+	{
+		int child_id = tree[index].child[i];
+		tree[child_id].step = tree[index].step + 1;
+		DFS(child_id);
+	}
+}
+
+int main()
+{
+	int k,node;
+	scanf("%d%lf%lf",&N,&P,&r);
+	r /= 100;
+	for(int i=0;i<N;i++)
+	{
+		scanf("%d",&k);
+		for(int j=0;j<k;j++)
+		{
+			scanf("%d",&node);
+			tree[i].child.push_back(node);
+		}
+	}
+	tree[0].step = 0;
+	DFS(0);
+	printf("%.4lf %d",P * pow(1 + r,minStep),num);
+	return 0;
+}
+

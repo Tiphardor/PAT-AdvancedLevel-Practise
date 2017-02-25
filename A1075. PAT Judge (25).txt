@@ -1,0 +1,82 @@
+#include <cstdio>
+#include <algorithm>
+
+using namespace std;
+
+const int maxn = 10010;
+
+int N,K,M;
+
+int full_score[5];
+
+struct Node
+{
+	int id;
+	int per_score[6];
+	int totol_score;
+	bool flag;
+	int solve_num;
+}node[maxn];
+
+bool cmp(Node a,Node b)
+{
+	if(a.totol_score != b.totol_score)
+		return a.totol_score > b.totol_score;
+	else if(a.solve_num != b.solve_num)
+		return a.solve_num > b.solve_num;
+	else
+		return a.id < b.id;
+}
+
+void initNode()
+{
+	for(int i=1;i<=N;i++)
+	{
+		node[i].id = i;
+		node[i].flag = false;
+		node[i].totol_score = 0;
+		fill(node[i].per_score,node[i].per_score+6,-1);
+		node[i].solve_num = 0;
+	}
+}
+
+int main()
+{
+	int id,qus_id,score;
+	scanf("%d%d%d",&N,&K,&M);
+	initNode();
+	for(int i=0;i<K;i++)
+		scanf("%d",&full_score[i]);
+	for(int i=0;i<M;i++)
+	{
+		scanf("%d%d%d",&id,&qus_id,&score);
+		if(score != -1)
+			node[id].flag = true;
+		if(score == full_score[qus_id-1] && node[id].per_score[qus_id] < score)
+			node[id].solve_num++;
+		if(node[id].per_score[qus_id] == -1)
+			node[id].per_score[qus_id] = 0;
+		if(score > node[id].per_score[qus_id])
+		{
+			node[id].totol_score = node[id].totol_score + score - node[id].per_score[qus_id];
+			node[id].per_score[qus_id] = score;
+		}
+	}
+	sort(node+1,node+N+1,cmp);
+	int rate = 1;
+	for(int i=1;i<=N && node[i].flag == true;i++)
+	{
+		if(i > 1 && node[i].totol_score != node[i-1].totol_score)
+			rate = i;
+		printf("%d %05d %d",rate,node[i].id,node[i].totol_score);
+		for(int j=1;j<=K;j++)
+		{
+			if(node[i].per_score[j] != -1)
+				printf(" %d",node[i].per_score[j]);
+			else
+				printf(" -");
+		}
+		printf("\n");
+	}
+	return 0;
+}

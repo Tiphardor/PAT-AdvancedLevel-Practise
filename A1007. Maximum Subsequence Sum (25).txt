@@ -1,0 +1,61 @@
+#include<stdio.h>
+#define Max -10000000
+struct Node
+{
+	int first_value;
+	int later_value;
+	int sum;
+};
+int main()
+{
+	Node node[10010];
+	int i,n,a[10010],sum=0,first_value,later_value,max=Max,j=0,found,is_bool=0;
+	scanf("%d",&n);
+	for(i=0;i<n;i++)
+	{
+		scanf("%d",&a[i]);
+	}
+	for(i=0;i<n;i++)
+	{
+		if(a[i]>=0)
+		{
+			is_bool = 1;
+			break;
+		}
+	}
+	if(is_bool==0)
+	{
+		printf("0 %d %d",a[0],a[n-1]);
+	}
+	else
+	{
+		for(i=0;i<n;i++)
+		{
+			later_value = max = a[i];
+			sum = 0;
+			for(j=i;j<n;j++)
+			{
+				sum=sum+a[j];
+				if(sum>max)
+				{
+					max=sum;
+					later_value = a[j];
+				}
+			}
+			node[i].first_value=a[i];
+			node[i].later_value=later_value;
+			node[i].sum=max;
+		}
+		max = Max;
+		for(i=0;i<n;i++)
+		{
+			if(node[i].sum>max)
+			{
+				max = node[i].sum;
+				found = i;
+			}
+		}
+		printf("%d %d %d",node[found].sum,node[found].first_value,node[found].later_value);
+	}
+	return 0;
+}

@@ -1,0 +1,134 @@
+#include <cstdio>
+#include <queue>
+#include <malloc.h>
+
+using namespace std;
+
+const int maxn = 20;
+
+int n;
+bool flag[maxn] = {false};
+
+struct N
+{
+	char l;
+	char r;
+}temp[maxn];
+
+struct node
+{
+	int data;
+	struct node * lchild;
+	struct node * rchild;
+};
+
+queue<node *> q;
+
+node * createTree(int head)
+{
+	node * root = (node *)malloc(sizeof(node));
+	root->data = head;
+	root->lchild = NULL;
+	root->rchild = NULL;
+	q.push(root);
+	while(!q.empty())
+	{
+		node * nroot = q.front();
+		int i = nroot->data;
+		q.pop();
+		if(temp[i].l != '-')
+		{
+			int l = temp[i].l - '0';
+			node * n = (node *)malloc(sizeof(node));
+			n->data = l;
+			n->lchild = NULL;
+			n->rchild = NULL;
+			nroot->lchild = n;
+			q.push(n);
+		}
+		if(temp[i].r != '-')
+		{
+			int r = temp[i].r - '0';
+			node * n = (node *)malloc(sizeof(node));
+			n->data = r;
+			n->lchild = NULL;
+			n->rchild = NULL;
+			nroot->rchild = n;
+			q.push(n);
+		}
+	}
+	return root;
+}
+
+queue<node *> order_q;
+
+void level_order(node * root)
+{
+	order_q.push(root);
+	int i = 0;
+	while(!order_q.empty())
+	{
+		node * n = order_q.front();
+		order_q.pop();
+		if(i == 0)
+			printf("%d",n->data);
+		else
+			printf(" %d",n->data);
+		i++;
+		if(n->rchild != NULL)
+			order_q.push(n->rchild);
+		if(n->lchild != NULL)
+			order_q.push(n->lchild);
+	}
+}
+
+int x = 0;
+void in_order(node * root)
+{
+	if(root->rchild != NULL)
+		in_order(root->rchild);
+	if(x == 0)
+	{
+		printf("%d",root->data);
+		x++;
+	}
+	else
+	{
+		printf(" %d",root->data);
+	}
+	if(root->lchild != NULL)
+		in_order(root->lchild);
+}
+
+int main()
+{
+	node * root;
+	int head;
+	scanf("%d",&n);
+	getchar();
+	for(int i=0;i<n;i++)
+	{
+		scanf("%c %c",&temp[i].l,&temp[i].r);
+		getchar();
+	}
+	for(int i=0;i<n;i++)
+	{
+		if(temp[i].l != '-')
+			flag[temp[i].l-'0'] = true;
+		if(temp[i].r != '-')
+			flag[temp[i].r-'0'] = true;
+	}
+	for(int i=0;i<n;i++)
+	{
+		if(flag[i] == false)
+		{
+			head = i;
+			break;
+		}
+	}
+	root = createTree(head);
+	level_order(root);
+	printf("\n");
+	in_order(root);
+	return 0;
+}

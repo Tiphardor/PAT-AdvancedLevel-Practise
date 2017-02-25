@@ -1,0 +1,42 @@
+#include<stdio.h>
+#include<string.h>
+int main()
+{
+	char ch[10000];
+	int l,i,sum=0,a[10000],m,j=0;
+	scanf("%s",ch);
+	l=strlen(ch);
+	for(i=0;i<l;i++)
+	{
+		sum = sum+ch[i]-'0';
+	}
+	if(sum==0)
+	{
+		a[j]=0;
+		j++;
+	}
+	while(sum>0)
+	{
+		m=sum%10;
+		a[j]=m;
+		j++;
+		sum=sum/10;
+	}
+	for(i=j-1;i>=0;i--)
+	{
+		switch(a[i])
+		{
+			case 1:if(i==0)printf("one"); else printf("one "); break;
+			case 2:if(i==0)printf("two"); else printf("two "); break;
+			case 3:if(i==0)printf("three"); else printf("three "); break;
+			case 4:if(i==0)printf("four"); else printf("four "); break;
+			case 5:if(i==0)printf("five"); else printf("five "); break;
+			case 6:if(i==0)printf("six"); else printf("six "); break;
+			case 7:if(i==0)printf("seven"); else printf("seven "); break;
+			case 8:if(i==0)printf("eight"); else printf("eight "); break;
+			case 9:if(i==0)printf("nine"); else printf("nine "); break;
+			case 0:if(i==0)printf("zero"); else printf("zero "); break;
+		}
+	}
+	return 0;
+}

@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <map>
+using namespace std;
+
+const int maxn = 1000000;
+
+map<int,int> count;
+
+int main()
+{
+	int n,m,data;
+	scanf("%d %d",&n,&m);
+	for(int i = 0;i<m;i++)
+	{
+		for(int j = 0;j<n;j++)
+		{
+			scanf("%d",&data);
+			if(count.find(data) == count.end())
+				count[data] = 1;
+			else
+				count[data]++;
+		}
+	}
+	int max = 0,k;
+	for(map<int,int>::iterator it = count.begin();it != count.end();it++)
+	{
+		if(it->second > max)
+		{
+			max = it->second;
+			k = it->first;
+		}
+	}
+	printf("%d",k);
+	return 0;
+}

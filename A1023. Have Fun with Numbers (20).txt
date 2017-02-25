@@ -1,0 +1,60 @@
+#include <stdio.h>
+#include <string.h>
+int main()
+{
+	char str1[100],str2[100];
+	int l,i,a[10]={0},found=0,j=0,result=0,b[10]={0},is_bool=0;
+	gets(str1);
+	l=strlen(str1);
+	for(i=0;i<l;i++)
+		a[str1[i]-'0']++;
+	for(i=l-1;i>=0;i--)
+	{
+		result = (str1[i]-'0')*2+found;
+		if(result>=10)
+		{
+			found = 1;
+			str2[j] = result%10+'0';
+			j++;
+			b[result%10]++;
+		}
+		else
+		{
+			found = 0;
+			str2[j] = result+'0';
+			j++;
+			b[result]++;
+		}
+	}
+	if(found == 1)
+	{
+		str2[j] = 1+'0';
+		j++;
+		b[1]++;
+	}
+	for(i=0;i<9;i++)
+	{
+		if(a[i] != b[i])
+		{
+			is_bool = 1;
+			break;
+		}
+	}
+	if(is_bool == 0)
+	{
+		printf("Yes\n");
+		for(i=j-1;i>=0;i--)
+		{
+			printf("%c",str2[i]);
+		}
+	}
+	else
+	{
+		printf("No\n");
+		for(i=j-1;i>=0;i--)
+		{
+			printf("%c",str2[i]);
+		}
+	}
+	return 0;
+}

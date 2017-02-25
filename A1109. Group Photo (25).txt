@@ -1,0 +1,83 @@
+#include <cstdio>
+#include <string.h>
+#include <algorithm>
+
+using namespace std;
+
+const int maxn = 10010;
+
+int n,k;
+
+struct node
+{
+	char name[9];
+	int tall;
+}person[maxn],result[maxn];
+
+bool cmp(node a,node b)
+{
+	if(a.tall != b.tall)
+		return a.tall > b.tall;
+	else
+		return strcmp(a.name,b.name) < 0;
+}
+
+int main()
+{
+	int number,yu;
+	scanf("%d%d",&n,&k);
+	for(int i = 0;i<n;i++)
+	{
+		scanf("%s%d",person[i].name,&person[i].tall);
+	}
+	sort(person,person+n,cmp);
+	number = n / k;
+	yu = n % k;
+	int low =0,height,mid,j,m=0;
+	for(int i = 0;i<k;i++)
+	{
+		j = 1;
+		if(i == 0)
+		{
+			low = i * number;
+			height = low + number - 1 + yu;
+		}
+		else
+		{
+			low = i * number + yu;
+			height = low + number - 1;
+		}
+		mid = (height + low + 1) / 2;
+		result[mid] = person[m++];
+		while(mid - j >= low || mid + j <= height)
+		{
+			if(mid - j >= low)
+				result[mid - j] = person[m++];
+			if(mid + j <= height)
+				result[mid + j] = person[m++];
+			j++;
+		}
+	}
+	for(int i=0;i<k;i++)
+	{
+		if(i == 0)
+		{
+			low = i * number;
+			height = low + number - 1 + yu;
+		}
+		else
+		{
+			low = i * number + yu;
+			height = low + number - 1;
+		}
+		for(int j=low;j<=height;j++)
+		{
+			if(j == low)
+				printf("%s",result[j].name);
+			else
+				printf(" %s",result[j].name);
+		}
+		printf("\n");
+	}
+	return 0;
+}

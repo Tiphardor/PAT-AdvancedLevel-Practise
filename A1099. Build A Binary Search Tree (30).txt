@@ -1,0 +1,115 @@
+#include <stdio.h>
+#include <queue>
+#include <malloc.h>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+const int maxn = 110;
+
+vector<int> v;
+
+struct Node
+{
+	int l;
+	int r;
+}node[maxn];
+
+struct Tree
+{
+	int data;
+	struct Tree * lchild;
+	struct Tree * rchild;
+};
+
+int N;
+
+struct Tree * createTree()
+{
+	struct Tree * root = (struct Tree *)malloc(sizeof(Tree));
+	root->data = 0;
+	root->lchild = NULL;
+	root->rchild = NULL;
+	queue<struct Tree *> q;
+	q.push(root);
+	while(!q.empty())
+	{
+		struct Tree * point = q.front();
+		q.pop();
+		int p = point->data;
+		if(node[p].l != -1)
+		{
+			struct Tree * newlpoint = (struct Tree *)malloc(sizeof(Tree));
+			newlpoint->data = node[p].l;
+			newlpoint->lchild = NULL;
+			newlpoint->rchild = NULL;
+			point->lchild = newlpoint;
+			q.push(newlpoint);
+		}
+		if(node[p].r != -1)
+		{
+			struct Tree * newrpoint = (struct Tree *)malloc(sizeof(Tree));
+			newrpoint->data = node[p].r;
+			newrpoint->lchild = NULL;
+			newrpoint->rchild = NULL;
+			point->rchild = newrpoint;
+			q.push(newrpoint);
+		}
+	}
+	return root;
+}
+
+int j = 0;
+
+void inOrder(struct Tree * root)
+{
+	if(root->lchild != NULL)
+		inOrder(root->lchild);
+	root->data = v[j++];
+	if(root->rchild != NULL)
+		inOrder(root->rchild);
+}
+
+void levelOrder(struct Tree * root)
+{
+	queue<struct Tree *> q;
+	q.push(root);
+	int i = 0;
+	while(!q.empty())
+	{
+		struct Tree * node = q.front();
+		q.pop();
+		if(i == 0)
+			printf("%d",node->data);
+		else
+			printf(" %d",node->data);
+		i++;
+		if(node->lchild != NULL)
+			q.push(node->lchild);
+		if(node->rchild != NULL)
+			q.push(node->rchild);
+	}
+}
+
+int main()
+{
+	struct Tree * root,*p;
+	scanf("%d",&N);
+	for(int i=0;i<N;i++)
+	{
+		scanf("%d %d",&node[i].l,&node[i].r);
+	}
+	root = createTree();
+	for(int i=0;i<N;i++)
+	{
+		int num;
+		scanf("%d",&num);
+		v.push_back(num);
+	}
+	sort(v.begin(),v.end());
+	p = root;
+	inOrder(p);
+	levelOrder(root);
+	return 0;
+}

@@ -1,0 +1,70 @@
+#include <cstdio>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+const int maxn = 1010;
+struct Node
+{
+	int id;
+	int step;
+};
+
+vector<Node> v[maxn];
+bool vis[maxn] = {false};
+
+int BFS(int start_id,int L)
+{
+	queue<Node> q;
+	Node start;
+	start.id = start_id;
+	start.step = 0;
+	int numForward = 0;
+	q.push(start);
+	vis[start_id] = true;
+	while(!q.empty())
+	{
+		Node top = q.front();
+		q.pop();
+		int id = top.id;
+		for(int i=0;i<v[id].size();i++)
+		{
+			Node next = v[id][i];
+			next.step = top.step + 1;
+			if(vis[next.id] == false && next.step <= L)
+			{
+				q.push(next);
+				vis[next.id] = true;
+				numForward++;
+			}
+		}
+	}
+	return numForward;
+}
+
+int main()
+{
+	Node user;
+	int n,L,numFollow,idFollow;
+	scanf("%d%d",&n,&L);
+	for(int i=1;i<=n;i++)
+	{
+		user.id = i;
+		scanf("%d",&numFollow);
+		for(int j=0;j<numFollow;j++)
+		{
+			scanf("%d",&idFollow);
+			v[idFollow].push_back(user);
+		}
+	}
+	int numQuery,start_id;
+	scanf("%d",&numQuery);
+	for(int i=0;i<numQuery;i++)
+	{
+		memset(vis,false,sizeof(vis));
+		scanf("%d",&start_id);
+		printf("%d\n",BFS(start_id,L));
+	}
+	return 0;
+}

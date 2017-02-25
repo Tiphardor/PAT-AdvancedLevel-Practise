@@ -1,0 +1,59 @@
+#include<iostream>  
+#include<string.h>  
+#include<math.h>  
+using namespace std;  
+   
+bool is_Prime(int a)  
+{  
+    int i;  
+    if(a==0 || a==1) return false;  
+   
+    //注意是i<=sqrt(),之前弄成i<sqrt,一直出错  
+    for(i=2; i <= sqrt((double)a); i++){  
+        if( a%i == 0) return false;  
+    }  
+   
+    return true;  
+}  
+   
+int change(int n,int d){  
+    int a[100000];  
+    memset(a,0,sizeof(a));  
+    int total = 0;  
+    int j;  
+    int i;  
+    for(i=0; ; i++){  
+        a[i] = n%d;  
+        n /= d;  
+        if(n==0) break;  
+    }  
+   
+    for(j=0; j<=i; j++)  
+    {  
+        total = total*d + a[j];  
+    }  
+/*也可以这样写 
+    do  
+    { 
+        total = total*d + n%d; 
+        n/=d; 
+    } while (n != 0); 
+*/ 
+    return total;  
+}  
+   
+int main()  
+{  
+    int N,D;  
+    while(cin>>N){  
+        if( N<0 ) break;  
+        cin>>D;  
+        if( is_Prime(N) && is_Prime( change(N,D) )){  
+            cout<<"Yes"<<endl;  
+        }  
+        else{  
+            cout<<"No"<<endl;  
+        }  
+    }  
+    return 0;  
+}  

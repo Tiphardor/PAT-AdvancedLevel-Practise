@@ -1,0 +1,25 @@
+#include <stdio.h>
+#include <algorithm>
+using namespace std;
+
+const int maxn = 2000020;
+int a[maxn];
+int n1,n2;
+
+int main()
+{
+	int i,j,m;
+	scanf("%d",&n1);
+	for(i = 0;i<n1;i++)
+		scanf("%d",&a[i]);
+	scanf("%d",&n2);
+	for(j = n1;j<n1+n2;j++)
+		scanf("%d",&a[j]);
+	sort(a,a+n1+n2);
+	if((n1 + n2) % 2 == 1)
+		m = (n1 + n2) / 2;
+	else
+		m = (n1 + n2) /2 - 1;
+	printf("%d",a[m]);
+	return 0;
+}

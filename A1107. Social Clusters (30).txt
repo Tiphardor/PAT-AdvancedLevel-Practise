@@ -1,0 +1,95 @@
+#include <cstdio>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+bool cmp(int a,int b)
+{
+	return a > b;
+}
+
+const int maxn = 1010;
+
+int pre[maxn],N,ans[maxn]={0},vis[maxn]={0};
+
+vector<int> v[maxn],result; 
+
+void init()
+{
+	for(int i=0;i<maxn;i++)
+		pre[i] = i;
+}
+
+int findRoot(int x)
+{
+	int r = x;
+	while(r != pre[r])
+	{	
+		r = pre[r];
+	}
+	return r;
+}
+
+void union_x_y(int x,int y)
+{
+	int px = findRoot(x);
+	int py = findRoot(y);
+	if(px == py)
+		return;
+	pre[py] = px;
+}
+
+int main()
+{
+	int k;
+	init();
+	scanf("%d",&N);
+	for(int i=1;i<=N;i++)
+	{
+		scanf("%d:",&k);
+		for(int j=0;j<k;j++)
+		{
+			int num;
+			scanf("%d",&num);
+			v[num].push_back(i);
+		}
+	}
+	for(int i=1;i<=1000;i++)
+	{
+		if(v[i].size() != 0)
+		{
+			int x = v[i][0];
+			for(int j=1;j<v[i].size();j++)
+			{
+				int y = v[i][j];
+				union_x_y(x,y);
+			}
+		}
+	}
+	for(int i=1;i<=N;i++)
+	{
+		vis[i] = findRoot(i);
+	}
+	for(int i=1;i<=N;i++)
+	{
+		ans[vis[i]]++;
+	}
+	for(int i=0;i<maxn;i++)
+	{
+		if(ans[i] != 0)
+		{
+			result.push_back(ans[i]);
+		}
+	}
+	sort(result.begin(),result.end(),cmp);
+	printf("%d\n",result.size());
+	for(int i=0;i<result.size();i++)
+	{
+		if(i == 0)
+			printf("%d",result[i]);
+		else
+			printf(" %d",result[i]);
+	}
+	return 0;
+}

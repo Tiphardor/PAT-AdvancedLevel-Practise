@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <algorithm>
+using namespace std;
+struct Node
+{
+	float liang;
+	float price;
+	double danjia;
+};
+bool comp(const Node &a,const Node &b)
+{
+	return a.danjia > b.danjia;
+}
+int main()
+{
+	Node node[5000];
+	double result = 0;
+	int n,d,i;
+	scanf("%d %d",&n,&d);
+	for(i=0;i<n;i++)
+		scanf("%f",&node[i].liang);
+	for(i=0;i<n;i++)
+		scanf("%f",&node[i].price);
+	for(i=0;i<n;i++)
+		node[i].danjia = (double)node[i].price/node[i].liang;
+	sort(node,node+n,comp);
+	for(i=0;i<n;i++)
+	{
+		if(d - node[i].liang >= 0)
+		{
+			result = result + node[i].price;
+			d = d - node[i].liang;
+		}
+		else
+		{
+			result = result + d * node[i].danjia;
+			break;
+		}
+	}
+	printf("%.2lf",result);
+	return 0;
+}

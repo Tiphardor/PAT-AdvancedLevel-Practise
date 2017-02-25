@@ -1,0 +1,242 @@
+#include <cstdio>
+#include <vector>
+#include <algorithm>
+#include <math.h>
+#include <iostream>
+
+using namespace std;
+
+const int maxn = 1810;
+const double INF = 1000000000;
+
+int n,m,st,ed;
+
+double G[maxn][maxn],cost[maxn][maxn],d[maxn],c[maxn];
+bool vis[maxn] = {false};
+
+vector<int> pre[maxn],pre1[maxn],tempObj,path,pathG,tempPath;
+
+void Dijkstra(int st)
+{
+	fill(d,d+maxn,INF);
+	fill(c,c+maxn,INF);
+	d[st] = 0;
+	c[st] = 0;
+	for(int i = 0;i<n;i++)
+	{
+		pre[i].push_back(i);
+	}
+	for(int i=0;i<n;i++)
+	{
+		int u = -1;
+		double Min = INF;
+		for(int j = 0;j<n;j++)
+		{
+			if(vis[j] == false && d[j] < Min)
+			{
+				u = j;
+				Min = d[j];
+			}
+		}
+		if(u == -1)
+			return;
+		vis[u] = true;
+		for(int v = 0;v<n;v++)
+		{
+			if(vis[v] == false && G[u][v] != INF)
+			{
+				if(d[u] + G[u][v] < d[v])
+				{
+					d[v] = d[u] + G[u][v];
+					pre[v].clear();
+					pre[v].push_back(u);
+				}
+				else if(d[u] + G[u][v] == d[v])
+				{
+					pre[v].push_back(u);
+				}
+			}
+		}
+	}
+}
+
+void Dijsktra1(int st)
+{
+	fill(c,c+maxn,INF);
+	fill(vis,vis+maxn,false);
+	c[st] = 0;
+	for(int i=0;i<n;i++)
+	{
+		pre1[i].push_back(i);
+	}
+	for(int i=0;i<n;i++)
+	{
+		int u = -1;
+		double Min = INF;
+		for(int j = 0;j<n;j++)
+		{
+			if(vis[j] == false && c[j] < Min)
+			{
+				u = j;
+				Min = c[j];
+			}
+		}
+		if(u == -1)
+			return;
+		vis[u] = true;
+		for(int v=0;v<n;v++)
+		{
+			if(vis[v] == false && cost[u][v] != INF)
+			{
+				if(c[u] + cost[u][v] < c[v])
+				{
+					c[v] = c[u] + cost[u][v];
+					pre1[v].clear();
+					pre1[v].push_back(u);
+				}
+				else if(c[u] + cost[u][v] == c[v])
+				{
+					pre1[v].push_back(u);
+				}
+			}
+		}
+	}
+}
+
+int MIN = 1000000000;
+
+void DFS(int index)
+{
+	if(index == st)
+	{
+		tempObj.push_back(index);
+
+		if(tempObj.size() < MIN)
+		{
+			MIN = tempObj.size();
+			path = tempObj;
+		}
+		tempObj.pop_back();
+		return;
+	}
+	tempObj.push_back(index);
+	for(int i=0;i<pre1[index].size();i++)
+	{
+		DFS(pre1[index][i]);
+	}
+	tempObj.pop_back();
+}
+
+double total_cost = 1000000000;
+
+void DFSG(int index)
+{
+	if(index == st)
+	{
+		tempPath.push_back(index);
+		double temp_cost = 0;
+		for(int i=tempPath.size()-1;i>=1;i--)
+		{
+			int now_index = tempPath[i];
+			int next_index = tempPath[i-1];
+			temp_cost = temp_cost + cost[now_index][next_index];
+		}
+		if(temp_cost < total_cost)
+		{
+			pathG = tempPath;
+			total_cost = temp_cost;
+		}
+		tempPath.pop_back();
+		return;
+	}
+	tempPath.push_back(index);
+	for(int i=0;i<pre[index].size();i++)
+	{
+		DFSG(pre[index][i]);
+	}
+	tempPath.pop_back();
+}
+
+int main()
+{
+	fill(G[0],G[0]+maxn*maxn,INF);
+	fill(cost[0],cost[0]+maxn*maxn,INF);
+	scanf("%d %d",&n,&m);
+	for(int i=0;i<m;i++)
+	{
+		int id1,id2,k;
+		double dis,time;
+		scanf("%d%d%d%lf%lf",&id1,&id2,&k,&dis,&time);
+		if(k == 1)
+		{
+			G[id1][id2] = dis;
+			cost[id1][id2] = time;
+		}
+		else
+		{
+			G[id1][id2] = G[id2][id1] = dis;
+			cost[id1][id2] = cost[id2][id1] = time;
+		}
+	}
+	scanf("%d%d",&st,&ed);
+	Dijkstra(st);
+	Dijsktra1(st);
+	DFSG(ed);
+	DFS(ed);
+	bool found = true;
+	if(pathG.size() == path.size())
+	{
+		for(int i=0;i<path.size();i++)
+		{
+			if(pathG[i] != path[i])
+			{
+				found = false;
+				break;
+			}
+		}
+	}
+	else
+	{
+		found = false;
+	}
+	if(st != ed)
+	{
+		if(found)
+		{
+			printf("Distance = %.0lf; Time = %.0lf: ",d[ed],c[ed]);
+			for(int i =pathG.size()-1;i>=0;i--)
+			{
+				if(i == pathG.size()-1)
+					printf("%d",pathG[i]);
+				else
+					printf(" -> %d",pathG[i]);
+			}
+			printf("\n");
+		}
+		else
+		{
+			printf("Distance = %.0lf: ",d[ed]);
+			for(int i =pathG.size()-1;i>=0;i--)
+			{
+				if(i == pathG.size()-1)
+					printf("%d",pathG[i]);
+				else
+					printf(" -> %d",pathG[i]);
+			}
+			printf("\n");
+			printf("Time = %.0lf: ",c[ed]);
+			for(int i=path.size()-1;i>=0;i--)
+			{
+				if(i == path.size() - 1)
+					printf("%d",path[i]);
+				else
+					printf(" -> %d",path[i]);
+			}
+		}
+	}
+	else
+	{
+		printf("Distance = 0; Time = 0: %d -> %d\n",st,ed);
+	}
+	return 0;
+}

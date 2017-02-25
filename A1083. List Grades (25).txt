@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <algorithm>
+
+using namespace std;
+
+const int maxn = 10010;
+
+int N,c = 0,grade1,grade2;
+
+struct Node{
+	char name[11];
+	char id[11];
+	int grade;
+}student[maxn];
+
+bool cmp(Node a,Node b)
+{
+	return a.grade > b.grade;
+}
+
+int main()
+{
+	scanf("%d",&N);
+	for(int i=0;i<N;i++)
+	{
+		scanf("%s%s%d",student[i].name,student[i].id,&student[i].grade);
+	}
+	scanf("%d%d",&grade1,&grade2);
+	for(int i=0;i<N;i++)
+	{
+		if(student[i].grade >= grade1 && student[i].grade <= grade2)
+		{
+			c++;
+		}
+	}
+	if(c > 0)
+	{
+		sort(student,student+N,cmp);
+		for(int i=0;i<N;i++)
+		{
+			if(student[i].grade >= grade1 && student[i].grade <= grade2)
+			{
+				printf("%s %s\n",student[i].name,student[i].id);
+			}
+		}
+	}else
+	{
+		printf("NONE");
+	}
+	return 0;
+}

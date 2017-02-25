@@ -1,0 +1,157 @@
+#include <cstdio>
+#include <queue>
+#include <malloc.h>
+#include <vector>
+#include <string.h>
+
+using namespace std;
+
+const int maxn = 30;
+
+int n;
+
+bool vis[maxn] = {false};
+
+struct tt
+{
+	char l[3];
+	char r[3];
+	int l_int;
+	int r_int;
+}number[maxn];
+
+struct Node
+{
+	int data;			
+	Node * lchild;
+	Node * rchild;
+};
+
+Node * result;
+
+Node * createTree(int k)
+{
+	queue<Node *> q;
+	Node * root = (Node *)malloc(sizeof(Node));
+	root->data = k;
+	root->lchild = NULL;
+	root->rchild = NULL;
+	q.push(root);
+	while(!q.empty())
+	{
+		Node * node = q.front();
+		int node_index = node->data;
+		q.pop();
+		if(strcmp(number[node_index].l,"-") != 0)
+		{
+			Node * lch = (Node *)malloc(sizeof(Node));
+			lch->data = number[node_index].l_int;
+			lch->lchild = NULL;
+			lch->rchild = NULL;
+			node->lchild = lch;
+			q.push(lch);
+		}
+		if(strcmp(number[node_index].r,"-") != 0)
+		{
+			Node * rch = (Node *)malloc(sizeof(Node));
+			rch->data = number[node_index].r_int;
+			rch->lchild = NULL;
+			rch->rchild = NULL;
+			node->rchild = rch;
+			q.push(rch);
+		}
+	}
+	return root;
+}
+vector<Node *> v; 
+bool isCompleteBinaryTree(Node * root)
+{
+	queue<Node *> q;
+	v.push_back(root);
+	q.push(root);
+	while(!q.empty())
+	{
+		Node * node = q.front();
+		q.pop();
+		v.push_back(node->lchild);
+		v.push_back(node->rchild);
+		if(node->lchild != NULL)
+		q.push(node->lchild);
+		if(node->rchild != NULL)
+		q.push(node->rchild);
+	}
+	int count = 0;
+	for(int i=0;i<v.size();i++)
+	{
+		if(v[i] != NULL)
+		{
+			count++;
+			result = v[i];
+		}
+		else
+		{
+			if(count == n)
+			{
+			return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
+}
+
+int main()
+{
+	int k;
+	Node * root;
+	scanf("%d",&n);
+	getchar();
+	for(int i=0;i<n;i++)
+	{
+		scanf("%s %s",number[i].l,number[i].r);
+		getchar();
+	}
+	for(int i=0;i<n;i++)
+	{
+		if(strcmp(number[i].l,"-") != 0)
+		{
+			int result = 0;
+			for(int j=0;j<strlen(number[i].l);j++)
+			{
+				result = result * 10 + number[i].l[j] - '0';
+			}
+			number[i].l_int = result;
+			vis[number[i].l_int] = true;
+		}
+		if(strcmp(number[i].r,"-") != 0)
+		{
+			int result = 0;
+			for(int j=0;j<strlen(number[i].r);j++)
+			{
+				result = result * 10 + number[i].r[j] - '0';
+			}
+			number[i].r_int = result;
+			vis[number[i].r_int] = true;
+		}
+	}
+	for(int i=0;i<n;i++)
+	{
+		if(vis[i] == false)
+		{
+			k = i;
+			break;
+		}
+	}
+	root = createTree(k);
+	if(isCompleteBinaryTree(root))
+	{
+		printf("YES %d\n",result->data);
+	}
+	else
+	{
+		printf("NO %d\n",root->data);
+	}
+	return 0;
+}

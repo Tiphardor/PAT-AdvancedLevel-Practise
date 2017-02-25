@@ -1,0 +1,69 @@
+#include <cstdio>
+#include <vector>
+#include <queue>
+
+using namespace std;
+const int maxn = 110;
+struct Node
+{
+	int step;
+	vector<int> child;
+}node[maxn];
+
+int floot[maxn]={0};
+int max_floot = -1;
+int max_count = -1,max_index;
+
+void BFS()
+{
+	queue<int> q;
+	node[1].step = 1;
+	q.push(1);
+	while(!q.empty())
+	{
+		int id = q.front();
+		q.pop();
+		floot[node[id].step]++;
+		for(int i=0;i<node[id].child.size();i++)
+		{
+			int child = node[id].child[i];
+			node[child].step = node[id].step + 1;
+			if(node[child].step > max_floot)
+			{
+				max_floot = node[child].step;
+			}
+			q.push(child);
+		}
+	}
+}
+
+int main()
+{
+	int n,m;
+	scanf("%d%d",&n,&m);
+	for(int i=0;i<m;i++)
+	{
+		int id,k;
+		scanf("%d%d",&id,&k);
+		for(int j=0;j<k;j++)
+		{
+			int child;
+			scanf("%d",&child);
+			node[id].child.push_back(child);
+		}
+	}
+	BFS();
+	for(int i=1;i<=max_floot;i++)
+	{
+		if(floot[i] > max_count)
+		{
+			max_count = floot[i];
+			max_index = i;
+		}
+	}
+	if(max_count!= -1)
+		printf("%d %d",max_count,max_index);
+	else
+		printf("1 1");
+	return 0;
+}

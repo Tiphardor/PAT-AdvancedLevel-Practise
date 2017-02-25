@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <algorithm>
+using namespace std;
+
+typedef long long ll;
+struct Fraction
+{
+	ll up,down;
+}fra[110];
+
+int gcd(int a,int b)
+{
+	if(b == 0)
+		return a;
+	else
+	{
+		return gcd(b,a%b);
+	}
+}
+
+Fraction reduction(Fraction fra)
+{
+	if(fra.down < 0)
+	{
+		fra.down = -fra.down;
+		fra.up = - fra.up;
+	}
+	if(fra.up == 0)
+		fra.down = 1;
+	else
+	{
+		int d = gcd(abs(fra.up),abs(fra.down));
+		if(d != 0)
+		{
+			fra.down = fra.down / d;
+			fra.up = fra.up / d;
+		}
+	}
+	return fra;
+}
+
+Fraction add(Fraction fra1,Fraction fra2)
+{
+	Fraction fra;
+	fra.down = fra1.down * fra2.down;
+	fra.up = fra1.up * fra2.down + fra2.up *fra1.down;
+	return reduction(fra);
+}
+
+void showFraction(Fraction fra)
+{
+	fra = reduction(fra);
+	if(fra.up == 0)
+		printf("0");
+	else
+	{
+		if(abs(fra.up) > fra.down)
+		{
+			if(abs(fra.up) % fra.down != 0)
+				printf("%lld %lld/%lld\n",fra.up/fra.down,abs(fra.up)%fra.down,fra.down);
+			else
+				printf("%lld",fra.up/fra.down);
+		}
+		else
+		{
+			printf("%lld/%lld\n",fra.up,fra.down);
+		}
+	}
+}
+
+int main()
+{
+	int n;
+	Fraction sum;
+	sum.down = 1;
+	sum.up = 0;
+	scanf("%d",&n);
+	for(int i = 0;i<n;i++)
+	{
+		scanf("%lld/%lld",&fra[i].up,&fra[i].down);
+		fra[i] = reduction(fra[i]);
+	}
+	for(int i = 0;i<n;i++)
+	{
+		sum = add(sum,fra[i]);
+	}
+	showFraction(sum);
+	return 0;
+}

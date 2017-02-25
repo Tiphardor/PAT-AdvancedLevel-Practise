@@ -1,0 +1,73 @@
+#include <cstdio>
+#include <cstring>
+
+const int maxn = 100000;
+
+int p[maxn]={0},t[maxn]={0};
+
+int main()
+{
+	char str[maxn];
+	int curr1=0,curr2=0,count=0,l,n1,n2;
+	gets(str);
+	n1 = n2 = l = strlen(str);
+	for(int i=0;i<l;i++)
+	{
+		if(str[i] == 'P')
+			count++;
+		else if(str[i] == 'A')
+		{
+			n1 = i;
+			p[curr1] = count;
+			count = 0;
+			break;
+		}
+	}
+	count=0;
+	for(int i = n1 + 1;i<l;i++)
+	{
+		if(str[i] == 'A')
+		{
+			curr1++;
+			p[curr1] = p[curr1 - 1] + count;
+			count = 0;
+		}
+		else if(str[i] == 'P')
+		{
+			count++;
+		}
+	}
+	count = 0;
+	for(int i = l-1;i>=0;i--)
+	{
+		if(str[i] == 'T')
+			count++;
+		else if(str[i] == 'A')
+		{
+			n2 = i;
+			t[curr2] = count;
+			count = 0;
+			break;
+		}
+	}
+	count = 0;
+	for(int i = n2-1;i>=0;i--)
+	{
+		if(str[i] == 'A')
+		{
+			curr2++;
+			t[curr2] = t[curr2 - 1] + count;
+			count = 0;
+		}else if(str[i] == 'T')
+		{
+			count++;
+		}
+	}
+	long flag = 0;
+	for(int i = 0;i<=curr1;i++)
+	{
+		flag = flag + p[i] * t[curr1 - i];
+	}
+	printf("%d",flag%1000000007);
+	return 0;
+}

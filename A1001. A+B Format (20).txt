@@ -1,0 +1,40 @@
+#include <cstdio>
+#include <cstring>
+#include <math.h>
+
+int main()
+{
+	int a,b,flag,c,yu,count=0,i=0;
+	char str[100];
+	scanf("%d%d",&a,&b);
+	c = a + b;
+	if(c == 0)
+		printf("0");
+	else{
+	if(c > 0)
+		flag = 1;
+	else{
+		flag = 0;
+		c = -c;
+	}
+	while(c > 0)
+	{
+		yu = c % 10;
+		c = c/10;
+		str[i] = yu + '0';
+		i++;
+		count++;
+		if(count == 3 && c != 0)
+		{
+			str[i] = ',';
+			i++;
+			count = 0;
+		}
+	}
+	if(!flag)
+		printf("-");
+	for(int j = i-1;j>=0;j--)
+		printf("%c",str[j]);
+	}
+	return 0;
+}

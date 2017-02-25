@@ -1,0 +1,104 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <algorithm>
+using namespace std;
+
+struct node
+{
+	int data;
+	int height;
+	node *lchild,*rchild;
+}*root,*null;
+
+void init()
+{
+	null = (node *)malloc(sizeof(node));
+	null->height = 0;
+	null->lchild = null->rchild = NULL;
+	root = null;
+}
+
+void getNewHeight(node *root)
+{
+	root->height = max(root->lchild->height,root->rchild->height) + 1;
+}
+
+void R(node * &root)
+{
+	node *temp = root->lchild;
+	root->lchild = temp->rchild;
+	temp->rchild = root;
+	getNewHeight(root);
+	getNewHeight(temp);
+	root = temp;
+}
+
+void L(node * &root)
+{
+	node *temp = root->rchild;
+	root->rchild = temp->lchild;
+	temp->lchild = root;
+	getNewHeight(root);
+	getNewHeight(temp);
+	root = temp;
+}
+
+void insert(node * &root,int data)
+{
+	if(root == null)
+	{
+		root = (node *)malloc(sizeof(node));
+		root->data = data;
+		root->height = 1;
+		root->lchild = root->rchild = null;
+		return;
+	}
+	if(data < root->data)
+	{
+		insert(root->lchild,data);
+		getNewHeight(root);
+		if((root->lchild->height) - (root->rchild->height) == 2)
+		{
+			if((root->lchild->lchild->height) - (root->lchild->rchild->height) == 1)
+			{
+				R(root);
+			}
+			else if((root->lchild->lchild->height) - (root->lchild->rchild->height) == -1)
+			{
+				L(root->lchild);
+				R(root);
+			}
+		}
+	}
+	else
+	{
+		insert(root->rchild,data);
+		getNewHeight(root);
+		if((root->rchild->height) - (root->lchild->height) == 2)
+		{
+			if((root->rchild->rchild->height) - (root->rchild->lchild->height) == 1)
+			{
+				L(root);
+			}
+			else if((root->rchild->rchild->height) - (root->rchild->lchild->height) == -1)
+			{
+				R(root->rchild);
+				L(root);
+			}
+		}
+	}
+}
+
+int main()
+{
+	int n,data;
+	scanf("%d",&n);
+	init();
+	for(int i = 0;i<n;i++)
+	{
+		scanf("%d",&data);
+		insert(root,data);
+	}
+	printf("%d",root->data);
+	return 0;
+}

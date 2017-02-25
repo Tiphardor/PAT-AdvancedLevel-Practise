@@ -1,0 +1,28 @@
+#include <cstdio>
+
+int main()
+{
+	int n,a = 1,result = 0,high,low,mid;
+	scanf("%d",&n);
+	while(n / a != 0)
+	{
+		high = n / (a * 10);
+		low = n % a;
+		mid = n / a % 10;
+		switch(mid)
+		{
+			case 0:
+				result += high * a;
+				break;
+			case 1:
+				result += high * a + 1 + low;
+				break;
+			default:
+				result += (high + 1) * a;
+				break;
+		}
+		a = a * 10;
+	}
+	printf("%d",result);
+	return 0;
+}

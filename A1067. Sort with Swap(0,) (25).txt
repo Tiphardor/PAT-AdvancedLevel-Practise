@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <algorithm>
+using namespace std;
+
+const int maxn = 100010;
+int pos[maxn];
+
+int main()
+{
+	int n,num,left,ans = 0;
+	scanf("%d",&n);
+	left = n-1;
+	for(int i = 0;i<n;i++)
+	{
+		scanf("%d",&num);
+		pos[num] = i;
+		if(pos[num] == num && num != 0)
+			left--;
+	}
+	int k = 1;
+	while(left > 0)
+	{
+		if(pos[0] == 0)
+		{
+			while(k < n)
+			{
+				if(pos[k] != k)
+				{
+					swap(pos[k],pos[0]);
+					ans++;
+					break;
+				}
+				k++;
+			}
+		}		
+		while(pos[0] != 0)
+		{
+			swap(pos[0],pos[pos[0]]);
+			ans++;
+			left--;
+		}	
+	}
+	printf("%d",ans);
+	return 0;
+}

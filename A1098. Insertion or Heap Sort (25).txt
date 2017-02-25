@@ -1,0 +1,162 @@
+#include <cstdio>
+#include <algorithm>
+
+using namespace std;
+const int maxn = 100010;
+int n,a[maxn],tempObj[maxn],change[maxn];
+bool isSame(int tempObj[],int change[])
+{
+	for(int i=0;i<n;i++)
+	{
+		if(tempObj[i] != change[i])
+			return false;
+	}
+	return true;
+}
+
+bool isSame1(int tempObj[],int change[])
+{
+	for(int i=0;i<n;i++)
+	{
+		if(tempObj[i+1] != change[i])
+			return false;
+	}
+	return true;
+}
+
+void printfTemObj()
+{
+	for(int i=0;i<n;i++)
+	{
+		if(i == 0)
+			printf("%d",tempObj[i]);
+		else
+			printf(" %d",tempObj[i]);
+	}
+}
+
+void printfTemObj1()
+{
+	for(int i=1;i<=n;i++)
+	{
+		if(i == 1)
+			printf("%d",tempObj[i]);
+		else
+			printf(" %d",tempObj[i]);
+	}
+}
+
+bool Insertion_Sort()
+{
+	bool flag = false;
+	for(int i=1;i<n;i++)
+	{
+		int k = tempObj[i];
+		if(isSame(tempObj,change) && i != 1)
+			flag = true;
+		int j = i - 1;
+		while(k<tempObj[j] && j >= 0)
+		{
+			tempObj[j + 1] = tempObj[j];
+			j--;
+		}
+		tempObj[j + 1] = k;
+		if(flag)
+		{
+			printf("Insertion Sort\n");
+			printfTemObj();
+			return flag;
+		}
+	}
+	return flag;
+}
+
+bool Merge_Sort()
+{
+	bool flag = false;
+	for(int step = 2;step / 2 <= n; step = step * 2)
+	{
+		if(step != 2 && isSame(tempObj,change))
+			flag = true;
+		for(int i=0;i<n;i = i + step)
+		{
+			sort(tempObj + i,tempObj + min(i + step,n));
+		}
+		if(flag)
+		{
+			printf("Merge Sort\n");
+			printfTemObj();
+			return flag;
+		}
+	}
+	return flag;
+}
+
+void AdjustDown(int k,int len)
+{
+	int temp = tempObj[k];
+	for(int i = k * 2;i<=len;i = i * 2)
+	{
+		if(i<len && tempObj[i+1] > tempObj[i])
+			i++;
+		if(temp >= tempObj[i])
+			break;
+		tempObj[k] = tempObj[i];
+		k = i;
+	}
+	tempObj[k] = temp;
+}
+
+void BuildMaxHeap()
+{
+	for(int i = n / 2;i>0;i--)
+	{
+		AdjustDown(i,n);
+	}
+}
+
+bool Heap_Sort()
+{
+	BuildMaxHeap();
+	bool flag = false;
+	for(int i = n;i>0;i--)
+	{
+		if(i != n && isSame1(tempObj,change))
+			flag = true;
+		swap(tempObj[1],tempObj[i]);
+		AdjustDown(1,i-1);
+		if(flag)
+		{
+			printf("Heap Sort\n");
+			printfTemObj1();
+			return flag;
+		}
+	}
+	return flag;
+}
+
+int main()
+{
+	scanf("%d",&n);
+	for(int i=0;i<n;i++)
+	{
+		scanf("%d",&a[i]);
+	}
+	for(int i=0;i<n;i++)
+	{
+		scanf("%d",&change[i]);
+	}
+	for(int i=0;i<n;i++)
+	{
+		tempObj[i] = a[i];
+	}
+	if(!Insertion_Sort())
+	{
+		for(int i=0;i<n;i++)
+		{
+			tempObj[i+1] = a[i];
+		}
+		Heap_Sort();
+	}
+	return 0;
+}

@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+	char str[1001];
+	int i,j,x=0,first,last,l,max = 1;
+	gets(str);
+	l = strlen(str);
+	for(i=0;i<l;i++)
+	{
+		for(j=0;j<l-1;j++)
+		{
+			x = 0;
+			first = i;
+			last = l-1-j;
+			while(first < last)
+			{
+				if(str[first] == str[last])
+				{
+					x++;
+					first++;
+					last--;
+				}
+				else
+				{
+					break;
+				}
+			}
+			if(first == last)
+			{
+				x = x*2;
+				x++;
+				if(x>max)
+					max = x;
+				break;
+			}
+			if(first > last)
+			{
+				x = x*2;
+				if(x>max)
+					max = x;
+				break;
+			}
+		}
+	}
+	printf("%d",max);
+	return 0;
+}

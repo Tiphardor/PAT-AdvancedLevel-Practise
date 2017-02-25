@@ -1,0 +1,82 @@
+#include<stdio.h>
+#include<vector>
+#include<algorithm>
+#include<math.h>
+using namespace std;
+int ans[111][111];
+
+bool cmp(int a,int b)
+{
+    return a > b;
+}
+int main()
+{
+    int len,tem;
+    scanf("%d",&len);
+    vector<int> vv;
+    for(int i = 1 ;i <= len ;++i)
+    {
+        scanf("%d",&tem);
+        vv.push_back(tem);
+    }
+    sort(vv.begin(),vv.end(),cmp);
+    int n,m;
+    n = sqrt((double)len);
+    while(len % n != 0)
+    {
+        --n;
+    }
+    m = len / n;
+    int high = 1, low = m, left = 1,right = n;
+    int  x = 1,y = 1;
+    for(int i = 0 ;i < len ;++i)
+    {
+        while(i < len && x <= right)
+        {
+            ans[y][x] = vv[i];
+            ++i;
+            ++x;
+        }
+        --x;
+        ++y;
+        ++high;
+        while(i < len && y <= low)
+        {
+            ans[y][x] = vv[i];
+            ++i;
+            ++y;
+        }
+        --y;
+        --x;
+        --right;
+        while(i < len && x >= left)
+        {
+            ans[y][x] = vv[i];
+            ++i;
+            --x;
+        }
+        ++x;
+        --y;
+        --low;
+        while(i < len && y >= high)
+        {
+            ans[y][x] = vv[i];
+            ++i;
+            --y;
+        }
+        ++y;
+        ++x;
+        ++left;
+        --i;
+    }
+    for(int i = 1 ;i <= m ;++i)
+    {
+        for(int k = 1 ;k <= n ;++k)
+        {
+            if(k == 1) printf("%d",ans[i][k]);
+            else printf(" %d",ans[i][k]);
+        }
+        printf("\n");
+    }
+    return 0;
+}

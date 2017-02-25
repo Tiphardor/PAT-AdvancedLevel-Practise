@@ -1,0 +1,42 @@
+#include<stdio.h>
+#define Min 2<<20
+#define Max -1
+struct Person
+{
+	char ID[15];
+	int in_hour;
+	int in_min;
+	int in_sec;
+	int out_hour;
+	int out_min;
+	int out_sec;
+	int in_time;
+	int out_time;
+};
+int main()
+{
+	Person person[100];
+	int n,i,first,late,min=Min,max=Max;
+	scanf("%d",&n);
+	for(i=0;i<n;i++)
+	{
+		scanf("%s%d:%d:%d %d:%d:%d",person[i].ID,&person[i].in_hour,&person[i].in_min,&person[i].in_sec,&person[i].out_hour,&person[i].out_min,&person[i].out_sec);
+		person[i].in_time=person[i].in_hour*3600+person[i].in_min*60+person[i].in_sec;
+		person[i].out_time=person[i].out_hour*3600+person[i].out_min*60+person[i].out_sec;
+	}
+	for(i=0;i<n;i++)
+	{
+		if(min>person[i].in_time)
+		{
+			min = person[i].in_time;
+			first = i;
+		}
+		if(max<person[i].out_time)
+		{
+			max = person[i].out_time;
+			late = i;
+		}
+	}
+	printf("%s %s",person[first].ID,person[late].ID);
+	return 0;
+}

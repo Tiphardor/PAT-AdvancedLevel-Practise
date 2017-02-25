@@ -1,0 +1,37 @@
+#include <stdio.h>
+ 
+struct Node
+{
+	char data;
+	int next_id;
+	int flag;
+}node[100010];
+
+int main()
+{
+	int f1ad,f2ad,i,n,jiedian,address,data,next,p;
+	for(i=0;i<10010;i++)
+		node[i].flag = -1;
+	scanf("%d %d %d",&f1ad,&f2ad,&n);
+	for(i=0;i<n;i++)
+	{
+		scanf("%d %c %d",&address,&data,&next);
+		node[address].data = data;
+		node[address].next_id = next;
+		node[address].flag = -1;
+	}
+	for(p=f1ad;p!=-1;p=node[p].next_id)
+	{
+		node[p].flag = 1;
+	}
+	for(p=f2ad;p!=-1;p=node[p].next_id)
+	{
+		if(node[p].flag == 1)
+			break;
+	}
+	if(p!=-1)
+		printf("%05d",p);
+	else
+		printf("-1");
+	return 0;
+}

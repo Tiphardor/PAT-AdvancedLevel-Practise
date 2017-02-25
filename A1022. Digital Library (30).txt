@@ -1,0 +1,65 @@
+#include <stdio.h>
+#include <iostream>
+#include <string>
+#include <map>
+#include <set>
+using namespace std;
+
+map<string,set<int> > mpTitle,mpAuthor,mpKey,mpPub,mpYear;
+
+void query(map<string,set<int> >&mp,string &str)
+{
+	if(mp.find(str) == mp.end())
+		printf("Not Found\n");
+	else
+	{
+		for(set<int>::iterator it = mp[str].begin();it != mp[str].end();it++)
+			printf("%07d\n",*it);
+	}
+}
+
+int main()
+{
+	int n,m,id;
+	string title,author,key,pub,year;
+	scanf("%d",&n);
+	for(int i = 0;i<n;i++)
+	{
+		scanf("%d",&id);
+		getchar();
+		getline(cin,title);
+		mpTitle[title].insert(id);
+		getline(cin,author);
+		mpAuthor[author].insert(id);
+		while(cin>>key)
+		{
+			mpKey[key].insert(id);
+			if(getchar() == '\n')
+				break;
+		}
+		getline(cin,pub);
+		mpPub[pub].insert(id);
+		getline(cin,year);
+		mpYear[year].insert(id);
+	}
+	scanf("%d",&m);
+	for(int i = 0;i<m;i++)
+	{
+		int a;
+		string str;
+		scanf("%d: ",&a);
+		getline(cin,str);
+		printf("%d: %s\n",a,str.c_str());
+		if(a == 1)
+			query(mpTitle,str);
+		else if(a == 2)
+			query(mpAuthor,str);
+		else if(a == 3)
+			query(mpKey,str);
+		else if(a == 4)
+			query(mpPub,str);
+		else
+			query(mpYear,str);
+	}
+	return 0;
+}

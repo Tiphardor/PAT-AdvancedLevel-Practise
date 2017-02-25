@@ -1,0 +1,116 @@
+#include <stdio.h>
+#include <math.h>
+typedef struct
+{
+  int ni;//指数
+  double ani;//系数
+}poly;
+
+int main()
+{
+	poly poly1[100],poly2[100],poly3[100];
+	int n1,n2,i,j,m=0,max=-1,found;
+	double d;
+	scanf("%d",&n1);
+	for(i=0;i<n1;i++)
+	{
+		scanf("%d%lf",&poly1[i].ni,&poly1[i].ani);
+	}
+	scanf("%d",&n2);
+	for(i=0;i<n2;i++)
+	{
+		scanf("%d%lf",&poly2[i].ni,&poly2[i].ani);
+	}
+	if(poly1[0].ni>=poly2[0].ni)
+	{
+		for(i=0;i<n1;i++)
+		{
+			d=poly1[i].ani;
+			for(j=0;j<n2;j++)
+			{
+				if(poly1[i].ni == poly2[j].ni)
+				{
+					d=d+poly2[j].ani;
+					poly2[j].ani=0;
+				}
+			}
+			if(!(fabs(d-0)<1e-6)) 
+			{
+				poly3[m].ani=d;
+				poly3[m].ni = poly1[i].ni;
+				m++;
+			}
+		}
+		for(i=0;i<n2;i++)
+		{
+			if(!(fabs(poly2[i].ani-0)<1e-6))
+			{
+				poly3[m].ani=poly2[i].ani;
+				poly3[m].ni = poly2[i].ni;
+				m++;
+			}
+		}
+		printf("%d",m);
+		for(j=0;j<m;j++)
+		{
+			max = -1;
+			for(i=0;i<m;i++)
+			{
+				if(max<poly3[i].ni)
+				{
+					max=poly3[i].ni;
+					found=i;
+				}
+			}
+			printf(" %d %.1lf",poly3[found].ni,poly3[found].ani);
+			poly3[found].ni = -1;
+		}
+	}
+	else
+	{
+		for(i=0;i<n2;i++)
+		{
+			d=poly2[i].ani;
+			for(j=0;j<n1;j++)
+			{
+				if(poly2[i].ni == poly1[j].ni)
+				{
+					d=d+poly1[j].ani;
+					poly1[j].ani=0;
+				}
+			}
+			if(!(fabs(d-0)<1e-6)) 
+			{
+				poly3[m].ani=d;
+				poly3[m].ni = poly2[i].ni;
+				m++;
+			}
+		}
+		for(i=0;i<n1;i++)
+		{
+			if(!(fabs(poly1[i].ani-0)<1e-6))
+			{
+				poly3[m].ani=poly1[i].ani;
+				poly3[m].ni = poly1[i].ni;
+				m++;
+			}
+		}
+		printf("%d",m);
+		for(j=0;j<m;j++)
+		{
+			max = -1;
+			for(i=0;i<m;i++)
+			{
+				if(max<poly3[i].ni)
+				{
+					max=poly3[i].ni;
+					found=i;
+				}
+			}
+			printf(" %d %.1lf",poly3[found].ni,poly3[found].ani);
+			poly3[found].ni = -1;
+		}
+	}
+	
+	return 0;
+}

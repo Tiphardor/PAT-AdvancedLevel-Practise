@@ -1,0 +1,37 @@
+#include <stdio.h>
+
+int main()
+{
+	void calculate(int a);
+	int a[3],c1,c2,i;
+	for(i=0;i<3;i++)
+	{
+		scanf("%d",&a[i]);
+	}
+	printf("#");
+	for(i=0;i<3;i++)
+	{
+		c1 = a[i]/13;
+		c2 = a[i]%13;
+		calculate(c1);
+		calculate(c2);
+	}
+	return 0;
+}
+
+void calculate(int a)
+{
+	if(a >= 10)
+	{
+		switch(a)
+		{
+			case 10:printf("A");break;
+			case 11:printf("B");break;
+			case 12:printf("C");break;
+		}
+	}
+	else
+	{
+		printf("%d",a);
+	}
+}

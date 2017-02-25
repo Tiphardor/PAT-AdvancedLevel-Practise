@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <algorithm>
+using namespace std;
+
+const int maxn = 510;
+const int INF = 1000000;
+int G[maxn][maxn];
+int weight[maxn];
+bool vis[maxn] = {false};
+int d[maxn];
+int w[maxn];
+int num[maxn];
+
+int n,m,C1,C2;
+
+void Dijkstra(int s)
+{
+  fill(d,d+maxn,INF);
+  fill(w,w+maxn,0);
+  fill(num,num+maxn,0);
+  d[s] = 0;
+  w[s] = weight[s];
+  num[s] = 1;
+  for(int i = 0;i<n;i++)
+  {
+    int min = INF,u=-1;
+    for(int j = 0;j<n;j++)
+    {
+      if(vis[j] == false && d[j] < min)
+      {
+        min = d[j];
+        u = j;
+      }
+    }
+    if(u == -1)
+      return;
+    vis[u] = true;
+    for(int v = 0;v<n;v++)
+    {
+      if(vis[v] == false && G[u][v] != INF)
+      {
+        if(d[u] + G[u][v] < d[v])
+        {
+          d[v] = d[u] + G[u][v];
+          num[v] = num[u];
+          w[v] = w[u] + weight[v];
+        }
+        else if(d[u] + G[u][v] == d[v])
+        {
+          num[v] = num[v] + num[u];
+          if(w[u] + weight[v] > w[v])
+            w[v] = w[u] + weight[v];
+        }
+      }
+    }
+  }
+}
+
+int main()
+{
+  int c1,c2,we;
+  fill(G[0],G[0]+maxn*maxn,INF);
+  scanf("%d %d %d %d",&n,&m,&C1,&C2);
+  for(int i = 0;i<n;i++)
+    scanf("%d",&weight[i]);
+  for(int i = 0;i<m;i++)
+  {
+    scanf("%d %d %d",&c1,&c2,&we);
+    G[c1][c2] = G[c2][c1] = we;
+  }
+  Dijkstra(C1);
+  printf("%d %d",num[C2],w[C2]);
+  return 0;
+}

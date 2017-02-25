@@ -1,0 +1,59 @@
+#include<stdio.h>
+#include<string.h>
+#include<algorithm>
+using namespace std;
+struct student{
+	char id[14];
+	int grade;
+	int location;
+	int location_rank;
+	int rank;
+}stu[100010];
+
+bool cmp(student a,student b)
+{
+	if(a.grade != b.grade)       
+		return a.grade >b.grade;     //先按分数从高到低排
+	else
+		return strcmp(a.id,b.id) < 0; //分数相同按准考证号从小到大排序
+}
+
+int main()
+{
+	int n,a[1000],k,m=0; //m是总人数
+	scanf("%d",&n);
+	for(int i = 0;i<n;i++)
+	{
+		scanf("%d",&k);
+		for(int j = 0;j<k;j++)
+		{
+			scanf("%s %d",stu[m].id,&stu[m].grade);
+			stu[m].location = i + 1;
+			m++;
+		}
+		sort(stu+m-k,stu+m,cmp); //将该考场的考生排序
+		stu[m-k].location_rank = 1; //该考场的第一名设为1
+		for(int j=m-k+1;j<m;j++)
+		{
+			if(stu[j].grade == stu[j-1].grade)
+				stu[j].location_rank = stu[j-1].location_rank;
+			else
+				stu[j].location_rank = j+1-(m-k);
+		}
+	}
+	printf("%d\n",m);
+	sort(stu,stu+m,cmp);
+	stu[0].rank = 1;
+	for(int i = 1;i<m;i++)
+	{
+		if(stu[i].grade == stu[i-1].grade)
+			stu[i].rank = stu[i-1].rank;
+		else
+			stu[i].rank = i+1;
+	}
+	for(int i = 0;i<m;i++)
+	{
+		printf("%s %d %d %d\n",stu[i].id,stu[i].rank,stu[i].location,stu[i].location_rank);
+	}
+}
+

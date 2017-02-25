@@ -1,0 +1,65 @@
+#include <stdio.h>
+#include <string.h>
+struct Node
+{
+	char name[11];
+	char gender;
+	char ID[11];
+	int grade;
+};
+int main()
+{
+	Node node[10000];
+	int n,i,max=-1,min=101,found1=-1,found2=-1,result;
+	scanf("%d",&n);
+	for(i=0;i<n;i++)
+	{
+		scanf("%s %c%s%d",node[i].name,&node[i].gender,node[i].ID,&node[i].grade);
+	}
+	for(i=0;i<n;i++)
+	{
+		if(node[i].gender == 'M')
+		{
+			if(node[i].grade<min)
+			{
+				min = node[i].grade;
+				found1 = i;
+			}
+		}
+		if(node[i].gender == 'F')
+		{
+			if(node[i].grade>max)
+			{
+				max = node[i].grade;
+				found2 = i;
+			}
+		}
+	}
+	
+	if(found2 != -1)
+	{
+		printf("%s %s\n",node[found2].name,node[found2].ID);
+	}
+	else
+	{
+		printf("Absent\n");
+	}
+	if(found1 != -1)
+	{
+		printf("%s %s\n",node[found1].name,node[found1].ID);
+	}
+	else
+	{
+		printf("Absent\n");
+	}
+	if(found1 != -1 && found2 != -1)
+	{
+		result = node[found2].grade - node[found1].grade;
+		printf("%d",result);
+	}
+	else
+	{
+		printf("NA");
+	}
+	return 0;
+}

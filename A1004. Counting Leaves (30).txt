@@ -1,0 +1,58 @@
+#include <iostream>
+#include <cstdio>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+const int maxn = 110;
+
+struct Node
+{
+  int step;
+  vector<int> child;
+}node[maxn];
+
+int leaf[maxn] = {0};
+int max_h = 1;
+
+void DFS(int index)
+{
+	max_h = max(max_h,node[index].step);
+	if(node[index].child.size() == 0)
+	{
+		leaf[node[index].step]++;
+		return;
+	}
+	for(int i=0;i<node[index].child.size();i++)
+	{
+		int child = node[index].child[i];
+		node[child].step = node[index].step + 1;
+		DFS(child);
+	}
+}
+
+int main()
+{
+	int n,m,parent,child,k;
+	scanf("%d%d",&n,&m);
+	for(int i = 0;i<m;i++)
+	{
+		scanf("%d%d",&parent,&k);
+		for(int j=0;j<k;j++)
+		{
+			scanf("%d",&child);
+			node[parent].child.push_back(child);
+		}
+	}
+	node[1].step = 1;
+	DFS(1);
+	for(int i = 1;i<=max_h;i++)
+	{
+		if(i != max_h)
+		 printf("%d ",leaf[i]);
+		else
+		 printf("%d",leaf[i]);
+	}
+	return 0;
+}

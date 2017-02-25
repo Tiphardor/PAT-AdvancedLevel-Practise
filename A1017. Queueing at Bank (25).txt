@@ -1,0 +1,71 @@
+#include <cstdio>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+const int maxn = 10010;
+
+int N,K,result = 0;
+
+int serverwindow[maxn];
+int num = 0;
+
+struct Node
+{
+	int arriveTime,serverTime;
+}custom[maxn];
+
+bool cmp(Node a,Node b)
+{
+	return a.arriveTime < b.arriveTime;
+}
+
+int transToSecond(int h,int m,int s)
+{
+	return h * 3600 + m * 60 + s;
+}
+
+void init()
+{
+	for(int i=0;i<K;i++)
+		serverwindow[i] = transToSecond(8,0,0);
+}
+
+int main()
+{
+	int startTime = transToSecond(8,0,0);
+	int endTime = transToSecond(17,0,0);
+	scanf("%d %d",&N,&K);
+	init();
+	int h,m,s,time;
+	for(int i=0;i<N;i++)
+	{
+		scanf("%d:%d:%d %d",&h,&m,&s,&time);
+		custom[i].arriveTime = transToSecond(h,m,s);
+		custom[i].serverTime = time <= 60 ? time * 60 : 3600;
+	}
+	sort(custom,custom+N,cmp);
+	for(int i =0;i<N;i++)
+	{
+		int arrTime = custom[i].arriveTime;
+		if(arrTime <= endTime)
+		{
+			num++;
+			sort(serverwindow,serverwindow+K);
+			if(arrTime < serverwindow[0])
+			{
+				result = result + serverwindow[0] - arrTime;
+				serverwindow[0] = serverwindow[0] + custom[i].serverTime;
+			}
+			else
+			{
+				serverwindow[0] = serverwindow[0] + custom[i].serverTime + (arrTime - serverwindow[0]);
+			}
+		}
+	}
+	if(num != 0)
+		printf("%.1lf",result / 60.0 / num);
+	else
+		printf("0.0");
+}

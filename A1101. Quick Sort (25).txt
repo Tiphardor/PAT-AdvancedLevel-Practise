@@ -1,0 +1,53 @@
+#include <cstdio>
+#include <algorithm>
+
+using namespace std;
+
+const int maxn = 100010;
+
+int a[maxn],n,result[maxn]={0},len=0;
+bool flagL[maxn] = {false},flagR[maxn] = {false};
+int Min = 1000000000,Max = -1;
+
+int main()
+{
+	scanf("%d",&n);
+	for(int i =0;i<n;i++)
+	{
+		scanf("%d",&a[i]);
+	}
+	for(int i=0;i<n;i++)
+	{
+		if(a[i] > Max)
+		{
+			Max = a[i];
+			flagL[i] = true;
+		}
+	}
+	for(int i=n-1;i>=0;i--)
+	{
+		if(a[i] < Min)
+		{
+			Min = a[i];
+			flagR[i] = true;
+		}
+	}
+	for(int i=0;i<n;i++)
+	{
+		if(flagL[i] && flagR[i])
+		{
+			result[len++] = a[i];
+		}
+	}
+	sort(result,result+len);
+	printf("%d\n",len);
+	for(int i=0;i<len;i++)
+	{
+		if(i == 0)
+			printf("%d",result[i]);
+		else
+			printf(" %d",result[i]);
+	}
+	printf("\n");
+	return 0;
+}
